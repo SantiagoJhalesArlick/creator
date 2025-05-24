@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TAPPY CREATOR</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e0e0e0;
+      line-height: 1.6;
+      flex-direction: column;
+    }
+
+    .container {
+      /* This container is less critical now as body and grid-container handle centering */
+      max-width: 1400px;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: #a5caca;
+      letter-spacing: 1.5px;
+      overflow: hidden;
+      border-right: .15em solid #a5caca;
+      white-space: nowrap;
+      margin: 0 auto 3rem auto;
+      animation:
+        typing 3.5s steps(23, end) forwards,
+        blink-caret .75s step-end forwards;
+      width: 0;
+      max-width: 100%;
+    }
+
+    /* Keyframes for the typing effect */
+    @keyframes typing {
+      from {
+        width: 0
+      }
+
+      to {
+        width: 100%
+      }
+    }
+
+    /* Keyframes for the blinking caret */
+    @keyframes blink-caret {
+
+      from,
+      to {
+        border-color: transparent
+      }
+
+      50% {
+        border-color: #a5caca;
+      }
+    }
+
+    .grid-container {
+      display: grid;
+      /* Define column width explicitly without '1fr' to allow justify-content to center the tracks */
+      /* minmax(320px, 380px) allows flexibility but limits max width for better centering behavior */
+      grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+      /* Changed gap from 20px to 10px */
+      gap: 0px;
+      width: 70%;
+      /* Ensure the grid container takes full available width */
+      justify-content: center;
+      /* IMPORTANT: Centers the grid items/tracks within the grid container */
+      padding: 0 20px;
+      /* Add some padding to prevent cards from touching screen edges on smaller screens */
+      box-sizing: border-box;
+      /* Include padding in the element's total width */
+      margin: 0 auto;
+      /* Center the grid container itself if it has a max-width */
+      max-width: 1400px;
+      /* Limit the overall width of the grid container */
+    }
+
+    .team-member-link {
+      text-decoration: none;
+      /* Remove underline from the link */
+      color: inherit;
+      /* Inherit color from parent to avoid default blue link color */
+      display: block;
+      /* Make the link a block-level element to wrap the card properly */
+      /* No need for width/max-width here, the card handles it */
+    }
+
+    .team-member-card {
+      display: flex;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.7), 0 8px 16px -4px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      width: 100%;
+      max-width: 380px;
+      /* Retain max-width for individual cards */
+      box-sizing: border-box;
+      /* No text-align here, it's on .text-content */
+    }
+
+    .team-member-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 22px 45px -10px rgba(0, 0, 0, 0.9), 0 10px 20px -5px rgba(0, 0, 0, 0.6);
+    }
+
+    /* Keyframes for the rotation animation */
+    @keyframes rotate-arc {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Container for the image and its spinning border */
+    .spinning-border {
+      position: relative;
+      overflow: hidden;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    /* Pseudo-elements for the animated border */
+    .spinning-border::before,
+    .spinning-border::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      width: calc(100% + 16px);
+      height: calc(100% + 16px);
+      border-radius: 50%;
+      z-index: 0;
+      animation: rotate-arc 6s linear infinite;
+      pointer-events: none;
+    }
+
+    /* Styling for the primary arc of the border */
+    .spinning-border::before {
+      background: conic-gradient(transparent 0%, transparent 270deg, #00ffff 270deg, #00ffff 360deg);
+    }
+
+    /* Styling for the secondary, blurred arc of the border (for glow effect) */
+    .spinning-border::after {
+      background: conic-gradient(transparent 0%, transparent 270deg, #00e6e6 270deg, #00e6e6 360deg);
+      filter: blur(10px);
+      opacity: 0.95;
+      animation-delay: -3s;
+    }
+
+    /* Styling for the image itself within the spinning border container */
+    .spinning-border img {
+      position: relative;
+      z-index: 1;
+      border-radius: inherit;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: 6px solid #333333;
+    }
+
+    .text-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-grow: 1;
+      min-width: 0;
+      text-align: center;
+      /* This centers the text inside the card */
+    }
+
+    .team-member-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #00bfff;
+      margin-bottom: 5px;
+      margin-top: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .team-member-card p {
+      font-size: 0.9rem;
+      color: #a0a0a0;
+      margin-top: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 650px) {
+      .grid-container {
+        grid-template-columns: 1fr;
+        /* Single column, takes full width */
+        justify-content: center;
+        /* Centers cards within the single column */
+        gap: 15px;
+      }
+
+      .team-member-link {
+        width: 100%;
+        /* Make link take full width of grid cell */
+        margin: 0 auto;
+        /* Center the link block */
+      }
+
+      .team-member-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+        max-width: 280px;
+        /* Adjust as needed for single column */
+        /* margin: 0 auto; Removed margin here as it's on .team-member-link */
+      }
+
+      .spinning-border {
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100px;
+        height: 100px;
+      }
+
+      .text-content {
+        align-items: center;
+        /* Ensures content is centered when flex-direction is column */
+      }
+    }
+
+    /* For screens between 651px and 991px */
+    @media (min-width: 651px) and (max-width: 991px) {
+      .grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+        /* Let grid determine 2 columns */
+        justify-content: center;
+        /* Ensures columns are centered */
+      }
+
+      .team-member-link {
+        margin: 0 auto;
+        /* Center individual links within their grid cells */
+      }
+    }
+
+    /* For screens between 992px and 1399px */
+    @media (min-width: 992px) and (max-width: 1399px) {
+      .grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+        /* Let grid determine 3 columns */
+        justify-content: center;
+        /* Ensures columns are centered */
+      }
+
+      .team-member-link {
+        margin: 0 auto;
+        /* Center individual links within their grid cells */
+      }
+    }
+
+    /* For screens 1400px and above */
+    @media (min-width: 1400px) {
+      .grid-container {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 380px));
+        /* Let grid determine 4 columns */
+        justify-content: center;
+        /* Ensures columns are centered */
+      }
+
+      .team-member-link {
+        margin: 0 auto;
+        /* Center individual links within their grid cells */
+      }
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 3rem;
+    }
+
+    .logo-image {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      animation: none;
+    }
+
+    .header-title h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #a5caca;
+      letter-spacing: 1.5px;
+      margin: 0;
+      border-right: .15em solid #a5caca;
+      white-space: nowrap;
+      overflow: hidden;
+      animation:
+        typing 3.5s steps(23, end) forwards,
+        blink-caret .75s step-end forwards;
+      width: 0;
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header-title">
+    <img src="ai.png" alt="Tap Me Logo" class="logo-image" />
+    <h1>TAPPY CREATOR</h1>
+  </div>
+
+  <div class="grid-container">
+    <a href="https://www.facebook.com/jhales016" target="_blank" class="team-member-link">
+      <div class="team-member-card">
+        <div class="spinning-border">
+          <img src="aq2.png" alt="Jhales Santiago" />
+        </div>
+        <div class="text-content">
+          <h2>Jhales Santiago</h2>
+         
+        </div>
+      </div>
+    </a>
+
+    <a href="https://www.facebook.com/sofia.291021" target="_blank" class="team-member-link">
+      <div class="team-member-card">
+        <div class="spinning-border">
+          <img src="p.jpg" alt="Sofia Signo" />
+        </div>
+        <div class="text-content">
+          <h2>Sofia Signo</h2>
+          
+        </div>
+      </div>
+    </a>
+  </div>
+</body>
+
+</html>
